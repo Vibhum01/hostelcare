@@ -1,10 +1,365 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Member Dashboard | HostelCare</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .dashboard-header h1 {
+            margin: 0;
+        }
+
+        .member-info {
+            color: #666;
+            margin-top: 6px;
+        }
+
+        .logout-btn {
+            text-decoration: none;
+            background: #dc3545;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 6px;
+        }
+
+        .logout-btn:hover {
+            background: #b02a37;
+        }
+
+        .complaint-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .complaint-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+
+        .complaint-header h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .complaint-id {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .complaint-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .info-box {
+            background: #f7f7f7;
+            padding: 12px;
+            border-radius: 6px;
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .description {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .in-progress {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .resolved {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .priority {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .high {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        .medium {
+            background: #fff3cd;
+            color: #664d03;
+        }
+
+        .low {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .complaint-image {
+            max-width: 300px;
+            max-height: 250px;
+            margin-top: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .feedback-box {
+            margin-top: 18px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #2d5bea;
+            border-radius: 5px;
+        }
+
+        .feedback-box strong {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .empty-message {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .complaint-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
+
 <body>
-$END$
+
+<div class="dashboard-container">
+
+    <div class="dashboard-header">
+        <div>
+            <h1>Member Dashboard</h1>
+
+            <p class="member-info">
+                Welcome, {{ session.get('member_username') }}
+            </p>
+
+            <p class="member-info">
+                View all hostel complaints
+            </p>
+        </div>
+
+        <a href="{{ url_for('member_logout') }}" class="logout-btn">
+            Logout
+        </a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <p class="{{ category }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if complaints %}
+
+        {% for complaint in complaints %}
+
+        <div class="complaint-card">
+
+            <div class="complaint-header">
+
+                <div>
+                    <h2>{{ complaint[5] }}</h2>
+
+                    <span class="complaint-id">
+                        Complaint #{{ complaint[0] }}
+                    </span>
+                </div>
+
+                {% if complaint[7] == 'Pending' %}
+                    <span class="status pending">
+                        Pending
+                    </span>
+
+                {% elif complaint[7] == 'In Progress' %}
+                    <span class="status in-progress">
+                        In Progress
+                    </span>
+
+                {% elif complaint[7] == 'Resolved' %}
+                    <span class="status resolved">
+                        Resolved
+                    </span>
+                {% endif %}
+
+            </div>
+
+            <div class="complaint-info">
+
+                <div class="info-box">
+                    <strong>Student</strong>
+                    {{ complaint[1] }}
+                </div>
+
+                <div class="info-box">
+                    <strong>Email</strong>
+                    {{ complaint[2] }}
+                </div>
+
+                <div class="info-box">
+                    <strong>Room Number</strong>
+                    {{ complaint[3] }}
+                </div>
+
+                <div class="info-box">
+                    <strong>Category</strong>
+                    {{ complaint[4] }}
+                </div>
+
+                <div class="info-box">
+                    <strong>Priority</strong>
+
+                    {% if complaint[8] == 'High' %}
+                        <span class="priority high">High</span>
+
+                    {% elif complaint[8] == 'Medium' %}
+                        <span class="priority medium">Medium</span>
+
+                    {% elif complaint[8] == 'Low' %}
+                        <span class="priority low">Low</span>
+                    {% endif %}
+                </div>
+
+                <div class="info-box">
+                    <strong>Submitted On</strong>
+                    {{ complaint[10] }}
+                </div>
+
+            </div>
+
+            <div class="description">
+
+                <strong>Description</strong>
+
+                <p>
+                    {{ complaint[6] }}
+                </p>
+
+            </div>
+
+            {% if complaint[9] %}
+
+                <div>
+                    <strong>Complaint Image</strong>
+
+                    <br>
+
+                    <img
+                        src="{{ url_for('static', filename='uploads/' + complaint[9]) }}"
+                        alt="Complaint Image"
+                        class="complaint-image"
+                    >
+                </div>
+
+            {% endif %}
+
+            {% if complaint[11] %}
+
+                <div class="feedback-box">
+
+                    <strong>Student Feedback</strong>
+
+                    <div>
+                        Rating:
+                        {{ complaint[11] }}/5
+                    </div>
+
+                    <div>
+                        {{ complaint[12] }}
+                    </div>
+
+                    {% if complaint[13] %}
+                        <small>
+                            Submitted on: {{ complaint[13] }}
+                        </small>
+                    {% endif %}
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty-message">
+            <h2>No Complaints Found</h2>
+
+            <p>
+                There are currently no hostel complaints.
+            </p>
+        </div>
+
+    {% endif %}
+
+</div>
+
 </body>
 </html>

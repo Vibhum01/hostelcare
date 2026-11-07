@@ -1,10 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Member Login | HostelCare</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .login-container {
+            max-width: 420px;
+            margin: 80px auto;
+            padding: 35px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+            text-align: center;
+        }
+
+        .login-container h1 {
+            margin-bottom: 10px;
+        }
+
+        .login-container p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .member-badge {
+            display: inline-block;
+            padding: 7px 14px;
+            margin-bottom: 18px;
+            border-radius: 20px;
+            background: #eef4ff;
+            color: #2d5bea;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .login-container form {
+            text-align: left;
+        }
+
+        .login-container label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 11px;
+            margin-bottom: 18px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background: #2d5bea;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .login-container button:hover {
+            background: #2148c7;
+        }
+
+        .error-message {
+            color: #d63031;
+            margin-bottom: 15px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+        }
+    </style>
 </head>
+
 <body>
-$END$
+
+<div class="login-container">
+
+    <div class="member-badge">
+        HOSTELCARE MEMBER
+    </div>
+
+    <h1>Member Login</h1>
+
+    <p>Login to view hostel complaints</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <p class="{{ category }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if error %}
+        <p class="error-message">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+
+        <label for="username">Username</label>
+
+        <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Enter your username"
+            required
+        >
+
+        <label for="password">Password</label>
+
+        <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            required
+        >
+
+        <button type="submit">
+            Login as Member
+        </button>
+
+    </form>
+
+    <a href="{{ url_for('home') }}" class="back-link">
+        ← Back to Home
+    </a>
+
+</div>
+
 </body>
 </html>

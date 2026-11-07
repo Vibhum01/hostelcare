@@ -1,4 +1,3 @@
-
 import os
 import uuid
 from dotenv import load_dotenv
@@ -41,6 +40,15 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 ADMIN_USERNAME = os.getenv('ADMIN_USERNAME')
 ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD')
+
+MEMBER1_USERNAME = os.getenv('MEMBER1_USERNAME')
+MEMBER1_PASSWORD = os.getenv('MEMBER1_PASSWORD')
+
+MEMBER2_USERNAME = os.getenv('MEMBER2_USERNAME')
+MEMBER2_PASSWORD = os.getenv('MEMBER2_PASSWORD')
+
+MEMBER3_USERNAME = os.getenv('MEMBER3_USERNAME')
+MEMBER3_PASSWORD = os.getenv('MEMBER3_PASSWORD')
 
 UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'webp'}
@@ -146,6 +154,7 @@ def student_dashboard():
         searched=True
     )
 
+
 @app.route('/student/feedback/<int:complaint_id>', methods=['GET', 'POST'])
 def student_feedback(complaint_id):
     if not student_required():
@@ -177,8 +186,8 @@ def student_feedback(complaint_id):
         if rating not in ['1', '2', '3', '4', '5'] or not feedback:
             return render_template(
                 'feedback.html',
-                complaint_id = complaint_id,
-                error = 'Please select a rating and enter your feedback.'
+                complaint_id=complaint_id,
+                error='Please select a rating and enter your feedback.'
             )
 
         saved = submit_complaint_feedback(
@@ -297,6 +306,55 @@ def track():
         return redirect(url_for('student_login'))
 
     return redirect(url_for('student_dashboard'))
+
+
+@app.route('/member/login', methods=['GET', 'POST'])
+def member_login():
+    if session.get('member_logged_in'):
+        return redirect(url_for('member_dashboard'))
+
+    if request.method == 'POST':
+        username = request.form.get('username', '')
+        password = request.form.get('password', '')
+
+        valid_member = (
+            (username == MEMBER1_USERNAME and password == MEMBER1_PASSWORD) or
+            (username == MEMBER2_USERNAME and password == MEMBER2_PASSWORD) or
+            (username == MEMBER3_USERNAME and password == MEMBER3_PASSWORD)
+        )
+
+        if valid_member:
+            session.clear()
+            session.permanent = False
+            session['member_logged_in'] = True
+            session['member_username'] = username
+
+            flash('Member login successful!', 'success')
+            return redirect(url_for('member_dashboard'))
+
+        flash('Invalid username or password.', 'error')
+
+    return render_template('member_login.html')
+
+
+@app.route('/member')
+def member_dashboard():
+    if not session.get('member_logged_in'):
+        return redirect(url_for('member_login'))
+
+    complaints = get_all_complaints()
+
+    return render_template(
+        'member_dashboard.html',
+        complaints=complaints
+    )
+
+
+@app.route('/member/logout')
+def member_logout():
+    session.clear()
+    flash('You have been logged out.', 'success')
+    return redirect(url_for('member_login'))
 
 
 @app.route('/admin/login', methods=['GET', 'POST'])
@@ -556,24 +614,42 @@ def export_pdf():
             complaint[7],
             complaint[8],
             complaint[10],
-            complaint[11] if complaint [11] else '-',
-            Paragraph(str(complaint[12]) if complaint[12] else '-', styles['Normal'])
+            complaint[11] if complaint[11] else '-',
+            Paragraph(
+                str(complaint[12]) if complaint[12] else '-',
+                styles['Normal']
+            )
         ])
 
     table = Table(
         data,
         repeatRows=1,
-        colWidths=[30, 70, 110, 40, 65, 110, 55, 55, 75, 40, 100]
+        colWidths=[
+            30,
+            70,
+            110,
+            40,
+            65,
+            110,
+            55,
+            55,
+            75,
+            40,
+            100
+        ]
     )
 
     table.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
         ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
-        ('FONTNAME', (0, 0), (-1 ,0), 'Helvetica-Bold'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
         ('FONTSIZE', (0, 0), (-1, -1), 7),
         ('VALIGN', (0, 0), (-1, -1), 'TOP'),
         ('GRID', (0, 0), (-1, -1), 0.5, colors.black),
-        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.lightgrey])
+        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [
+            colors.white,
+            colors.lightgrey
+        ])
     ]))
 
     document.build([table])
