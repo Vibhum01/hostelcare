@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Submit Complaint | HostelCare</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(220, 53, 69, 0.08), transparent 35%),
+                #f4f7fb;
+            color: #222;
+        }
+
+        .complaint-page {
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+
+        .topbar {
+            height: 68px;
+            background: #111827;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 55px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .brand {
+            color: white;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .brand span {
+            color: #dc3545;
+        }
+
+        .student-info {
+            color: #d1d5db;
+            font-size: 13px;
+        }
+
+        .student-info strong {
+            color: white;
+        }
+
+        /* Main */
+
+        .main-container {
+            max-width: 900px;
+            margin: 55px auto;
+            padding: 0 20px;
+        }
+
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-header .tag {
+            display: inline-block;
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .page-header h1 {
+            margin: 0;
+            color: #111827;
+            font-size: 34px;
+        }
+
+        .page-header p {
+            margin-top: 10px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        /* Form Card */
+
+        .form-card {
+            background: white;
+            border-radius: 14px;
+            padding: 35px;
+            box-shadow: 0 8px 35px rgba(15, 23, 42, 0.08);
+            border: 1px solid #e5e7eb;
+        }
+
+        .logged-user {
+            background: #f8f9fa;
+            border: 1px solid #e5e7eb;
+            border-left: 4px solid #dc3545;
+            border-radius: 8px;
+            padding: 15px 18px;
+            margin-bottom: 28px;
+        }
+
+        .logged-user-title {
+            font-size: 11px;
+            font-weight: 800;
+            color: #6b7280;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .logged-user-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #222;
+        }
+
+        .logged-user-email {
+            font-size: 12px;
+            color: #777;
+            margin-top: 3px;
+        }
+
+        /* Form */
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #374151;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            background: #fff;
+            color: #222;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .form-group input,
+        .form-group select {
+            height: 46px;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #9ca3af;
+        }
+
+        /* Upload */
+
+        .upload-box {
+            border: 2px dashed #d1d5db;
+            border-radius: 9px;
+            padding: 24px;
+            text-align: center;
+            background: #fafafa;
+            transition: 0.2s;
+        }
+
+        .upload-box:hover {
+            border-color: #dc3545;
+            background: #fff8f8;
+        }
+
+        .upload-icon {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .upload-box h4 {
+            margin: 0 0 5px;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .upload-box p {
+            margin: 0 0 15px;
+            color: #9ca3af;
+            font-size: 11px;
+        }
+
+        .upload-box input {
+            border: none;
+            padding: 0;
+            width: auto;
+            font-size: 12px;
+        }
+
+        /* Submit */
+
+        .form-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 10px;
+            padding-top: 25px;
+            border-top: 1px solid #eee;
+        }
+
+        .back-link {
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            color: #dc3545;
+        }
+
+        .submit-btn {
+            border: none;
+            background: #dc3545;
+            color: white;
+            padding: 13px 25px;
+            border-radius: 7px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.25);
+        }
+
+        .submit-btn:hover {
+            background: #bb2d3b;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(220, 53, 69, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+
+        @media (max-width: 700px) {
+            .topbar {
+                padding: 0 20px;
+            }
+
+            .student-info {
+                display: none;
+            }
+
+            .main-container {
+                margin: 30px auto;
+            }
+
+            .page-header h1 {
+                font-size: 27px;
+            }
+
+            .form-card {
+                padding: 22px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .form-footer {
+                flex-direction: column-reverse;
+                align-items: stretch;
+            }
+
+            .submit-btn {
+                width: 100%;
+            }
+
+            .back-link {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="complaint-page">
+
+    <div class="topbar">
+
+        <div class="brand">
+            Hostel<span>Care</span>
+        </div>
+
+        <div class="student-info">
+            Student:
+            <strong>{{ session.get('student_name') }}</strong>
+            |
+            {{ session.get('student_email') }}
+        </div>
+
+    </div>
+
+
+    <main class="main-container">
+
+        <div class="page-header">
+
+            <span class="tag">
+                Hostel Maintenance
+            </span>
+
+            <h1>Submit a Complaint</h1>
+
+            <p>
+                Tell us about your hostel problem. We'll help you get it resolved.
+            </p>
+
+        </div>
+
+
+        <div class="form-card">
+
+            <div class="logged-user">
+
+                <div class="logged-user-title">
+                    Complaint submitted by
+                </div>
+
+                <div class="logged-user-name">
+                    {{ session.get('student_name') }}
+                </div>
+
+                <div class="logged-user-email">
+                    {{ session.get('student_email') }}
+                </div>
+
+            </div>
+
+
+            <form method="POST"
+                  action="{{ url_for('submit') }}"
+                  enctype="multipart/form-data">
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="room_number">
+                            Room Number
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="room_number"
+                            name="room_number"
+                            placeholder="Enter your room number"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="category">
+                            Complaint Category
+                            <span class="required">*</span>
+                        </label>
+
+                        <select
+                            id="category"
+                            name="category"
+                            required
+                        >
+
+                            <option value="">
+                                Select Category
+                            </option>
+
+                            <option value="Water">
+                                Water
+                            </option>
+
+                            <option value="Electricity">
+                                Electricity
+                            </option>
+
+                            <option value="WiFi">
+                                WiFi
+                            </option>
+
+                            <option value="Maintenance">
+                                Maintenance
+                            </option>
+
+                            <option value="Cleanliness">
+                                Cleanliness
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="subject">
+                        Complaint Subject
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="subject"
+                        name="subject"
+                        placeholder="Enter a short title for your complaint"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="description">
+                        Complaint Description
+                        <span class="required">*</span>
+                    </label>
+
+                    <textarea
+                        id="description"
+                        name="description"
+                        placeholder="Describe your problem clearly..."
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Upload Complaint Image
+                        <span style="color:#777; font-weight:400;">
+                            (Optional)
+                        </span>
+                    </label>
+
+                    <div class="upload-box">
+
+                        <div class="upload-icon">
+                            📷
+                        </div>
+
+                        <h4>
+                            Add an image of the problem
+                        </h4>
+
+                        <p>
+                            PNG, JPG, JPEG or WEBP • Maximum 16 MB
+                        </p>
+
+                        <input
+                            type="file"
+                            name="image"
+                            accept=".png,.jpg,.jpeg,.webp"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-footer">
+
+                    <a
+                        href="{{ url_for('student_dashboard') }}"
+                        class="back-link">
+                        ← Back to Dashboard
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="submit-btn">
+                        Submit Complaint
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

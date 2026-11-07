@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - HostelCare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">HostelCare</div>
+
+    <div class="nav-links">
+        <span>Welcome, {{ session['student_name'] }}</span>
+        <a href="{{ url_for('student_logout') }}">Logout</a>
+    </div>
+</nav>
+
+<div class="dashboard-container">
+
+    <div class="dashboard-header">
+        <div>
+            <h1>Student Dashboard</h1>
+            <p>Track and manage your hostel complaints</p>
+        </div>
+
+        <a href="{{ url_for('complaint') }}" class="primary-btn">
+            Submit Complaint
+        </a>
+    </div>
+
+    <div class="dashboard-cards">
+
+        <div class="dashboard-card">
+            <h3>Total Complaints</h3>
+            <h2>{{ complaints|length }}</h2>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>Pending</h3>
+            <h2>
+                {{ complaints|selectattr('7', 'equalto', 'Pending')|list|length }}
+            </h2>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>In Progress</h3>
+            <h2>
+                {{ complaints|selectattr('7', 'equalto', 'In Progress')|list|length }}
+            </h2>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>Resolved</h3>
+            <h2>
+                {{ complaints|selectattr('7', 'equalto', 'Resolved')|list|length }}
+            </h2>
+        </div>
+
+    </div>
+
+    <div class="complaints-section">
+
+        <div class="section-title">
+            <h2>My Complaints</h2>
+        </div>
+
+        {% if complaints %}
+
+            {% for complaint in complaints %}
+
+            <div class="complaint-card">
+
+                <div class="complaint-header">
+
+                    <div>
+                        <h3>{{ complaint[5] }}</h3>
+
+                        <p>
+                            Complaint #{{ complaint[0] }}
+                        </p>
+                    </div>
+
+                    <div>
+
+                        {% if complaint[7] == 'Pending' %}
+                            <span class="status pending">Pending</span>
+
+                        {% elif complaint[7] == 'In Progress' %}
+                            <span class="status progress">In Progress</span>
+
+                        {% elif complaint[7] == 'Resolved' %}
+                            <span class="status resolved">Resolved</span>
+
+                        {% else %}
+                            <span class="status">{{ complaint[7] }}</span>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <div class="complaint-details">
+
+                    <p>
+                        <strong>Category:</strong>
+                        {{ complaint[4] }}
+                    </p>
+
+                    <p>
+                        <strong>Room:</strong>
+                        {{ complaint[3] }}
+                    </p>
+
+                    <p>
+                        <strong>Priority:</strong>
+                        {{ complaint[8] }}
+                    </p>
+
+                    <p>
+                        <strong>Submitted:</strong>
+                        {{ complaint[10] }}
+                    </p>
+
+                </div>
+
+
+                <div class="complaint-description">
+
+                    <p>
+                        {{ complaint[6] }}
+                    </p>
+
+                </div>
+
+
+                {% if complaint[9] %}
+
+                <div class="complaint-image">
+
+                    <img
+                        src="{{ url_for('static', filename='uploads/' + complaint[9]) }}"
+                        alt="Complaint Image"
+                    >
+
+                </div>
+
+                {% endif %}
+
+
+                {% if complaint[7] == 'Resolved' %}
+
+                    {% if complaint[11] %}
+
+                    <div class="feedback-display">
+
+                        <h4>
+                            Your Feedback:
+                            <span>{{ complaint[11] }}/5 ⭐</span>
+                        </h4>
+
+                        {% if complaint[12] %}
+                            <p>{{ complaint[12] }}</p>
+                        {% endif %}
+
+                        {% if complaint[13] %}
+                            <small>
+                                Submitted: {{ complaint[13] }}
+                            </small>
+                        {% endif %}
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="feedback-action">
+
+                        <a
+                            href="{{ url_for('student_feedback', complaint_id=complaint[0]) }}"
+                            class="primary-btn"
+                        >
+                            Give Feedback
+                        </a>
+
+                    </div>
+
+                    {% endif %}
+
+                {% endif %}
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <h3>No Complaints Found</h3>
+
+                <p>
+                    You haven't submitted any complaints yet.
+                </p>
+
+                <a
+                    href="{{ url_for('complaint') }}"
+                    class="primary-btn"
+                >
+                    Submit Your First Complaint
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

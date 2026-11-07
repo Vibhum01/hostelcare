@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint Feedback | HostelCare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .feedback-container {
+            max-width: 550px;
+            margin: 60px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        .feedback-container h1 {
+            text-align: center;
+            color: #2563eb;
+        }
+        .feedback-container p {
+            text-align: center;
+            color: #64748b;
+        }
+        .feedback-container label {
+            display: block;
+            margin: 20px 0 8px;
+            font-weight: bold;
+        }
+        .feedback-container select,
+        .feedback-container textarea {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+        }
+        .feedback-container textarea {
+            resize: vertical;
+        }
+        .feedback-container button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .feedback-container a {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: #2563eb;
+        }
+        .error {
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="feedback-container">
+
+    <h1>Share Your Feedback</h1>
+    <p>Complaint #{{ complaint_id }}</p>
+    <p>Tell us how well your hostel issue resolved.</p>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <form method="post">
+        <label for="rating">Rate Your Experience</label>
+        <select name="rating" id="rating" required>
+            <option value="">Select Rating</option>
+            <option value="5">★★★★★ - Excellent</option>
+            <option value="4">★★★★ - Very Good</option>
+            <option value="3">★★★ - Good</option>
+            <option value="2">★★ - Poor</option>
+            <option value="1">★ - Very Poor</option>
+        </select>
+
+        <label for="feedback">Your feedback</label>
+        <textarea
+            name="feedback"
+            id="feedback"
+            rows="5"
+            maxlength="1000"
+            placeholder="Share your experience..."
+            required
+        ></textarea>
+
+        <button type="submit">Submit Feedback</button>
+    </form>
+
+    <a href="{{ url_for('student_dashboard') }}">← Back to Dashboard</a>
+</div>
+
+</body>
+</html>

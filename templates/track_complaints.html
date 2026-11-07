@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Complaints | HostelCare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="complaint-container">
+
+    <div class="complaint-header">
+        <h1>Track Your Complaints</h1>
+        <p>Check the current status of your hostel complaints.</p>
+    </div>
+
+    <form action="{{ url_for('track') }}" method="POST">
+
+        <label>Email Address</label>
+        <input
+            type="email"
+            name="email"
+            placeholder="Enter your registered email"
+            required
+        >
+
+        <button type="submit">Track Complaints</button>
+
+    </form>
+
+    {% if searched %}
+
+        <h2 class="section-heading">Your Complaints</h2>
+
+        {% if complaints %}
+
+            {% for complaint in complaints %}
+
+                <div class="complaint-container admin-complaint-card">
+
+                    <h3>Complaint #{{ complaint[0] }}</h3>
+
+                    <p><strong>Student Name:</strong> {{ complaint[1] }}</p>
+                    <p><strong>Email:</strong> {{ complaint[2] }}</p>
+                    <p><strong>Room Number:</strong> {{ complaint[3] }}</p>
+                    <p><strong>Category:</strong> {{ complaint[4] }}</p>
+                    <p><strong>Subject:</strong> {{ complaint[5] }}</p>
+                    <p><strong>Description:</strong> {{ complaint[6] }}</p>
+
+                    <p><strong>Status:</strong> {{ complaint[7] }}</p>
+                    <p><strong>Priority:</strong> {{ complaint[8] }}</p>
+
+                    {% if complaint[9] %}
+                        <p><strong>Attached Image:</strong></p>
+
+                        <a
+                            href="{{ url_for('static', filename='uploads/' + complaint[9]) }}"
+                            target="_blank"
+                        >
+                            <img
+                                src="{{ url_for('static', filename='uploads/' + complaint[9]) }}"
+                                alt="Complaint Image"
+                                class="complaint-image"
+                            >
+                        </a>
+                    {% else %}
+                        <p><strong>Attached Image:</strong> No image uploaded.</p>
+                    {% endif %}
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p class="no-complaints">
+                No complaints found for this email address.
+            </p>
+
+        {% endif %}
+
+    {% endif %}
+
+    <a href="{{ url_for('home') }}">← Back to Home</a>
+
+</div>
+
+</body>
+</html>

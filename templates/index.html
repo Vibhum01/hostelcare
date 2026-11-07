@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HostelCare | Smart Hostel Management</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f8ff;
+            color: #172033;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+
+        /* NAVBAR */
+
+        .navbar {
+            height: 78px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            border-bottom: 1px solid #e7ecf5;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            color: #2563eb;
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 35px;
+            margin-left: 80px;
+        }
+
+        .nav-center a {
+            color: #53627a;
+            font-size: 15px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .nav-center a:hover {
+            color: #2563eb;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            padding: 10px 17px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .student-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .student-btn:hover {
+            background: #1d4ed8;
+            color: white;
+        }
+
+        .admin-btn {
+            background: white;
+            color: #2563eb;
+            border: 1px solid #2563eb;
+        }
+
+        .admin-btn:hover {
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+
+        /* HERO */
+
+        .hero {
+            min-height: 530px;
+            padding: 85px 7%;
+            background:
+                linear-gradient(135deg, #eaf2ff 0%, #f7faff 55%, #eef5ff 100%);
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            border-radius: 50%;
+            background: #dbeafe;
+            right: -140px;
+            top: -120px;
+            opacity: 0.6;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: #e0e7ff;
+            right: 230px;
+            bottom: -150px;
+            opacity: 0.5;
+        }
+
+        .hero-content {
+            max-width: 650px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            color: #2563eb;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 58px;
+            line-height: 1.08;
+            margin-bottom: 22px;
+            color: #101a33;
+        }
+
+        .hero h1 span {
+            color: #2563eb;
+        }
+
+        .hero p {
+            max-width: 600px;
+            color: #64748b;
+            font-size: 17px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .hero-info {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .hero-stat {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stat-icon {
+            width: 42px;
+            height: 42px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 18px rgba(37, 99, 235, 0.1);
+        }
+
+        .hero-stat strong {
+            display: block;
+            font-size: 14px;
+        }
+
+        .hero-stat small {
+            color: #64748b;
+            font-size: 12px;
+        }
+
+
+        /* SERVICES */
+
+        .services {
+            padding: 85px 7%;
+            background: #f5f8ff;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 650px;
+            margin: 0 auto 50px;
+        }
+
+        .section-label {
+            color: #2563eb;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            margin-top: 10px;
+            color: #14203a;
+        }
+
+        .section-header p {
+            color: #64748b;
+            margin-top: 12px;
+            line-height: 1.7;
+        }
+
+        .service-container {
+            max-width: 1200px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .service-card {
+            background: white;
+            border: 1px solid #e7ecf5;
+            border-radius: 18px;
+            padding: 35px 30px;
+            min-height: 300px;
+            box-shadow: 0 8px 30px rgba(30, 64, 175, 0.06);
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 18px 45px rgba(30, 64, 175, 0.12);
+            border-color: #d5e2ff;
+        }
+
+        .service-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #2563eb;
+        }
+
+        .service-icon {
+            width: 55px;
+            height: 55px;
+            background: #eff6ff;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            margin-bottom: 22px;
+        }
+
+        .service-card h3 {
+            font-size: 21px;
+            margin-bottom: 12px;
+            color: #172033;
+        }
+
+        .service-card p {
+            color: #64748b;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .service-actions {
+            margin-top: 25px;
+        }
+
+        .service-btn {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .service-btn:hover {
+            background: #1d4ed8;
+            color: white;
+        }
+
+        .support-list {
+            margin-top: 20px;
+            display: grid;
+            gap: 9px;
+        }
+
+        .support-list span {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .support-list span::first-letter {
+            color: #2563eb;
+        }
+
+
+        /* ABOUT */
+
+        .about {
+            padding: 85px 7%;
+            background: white;
+        }
+
+        .about-container {
+            max-width: 1100px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 70px;
+            align-items: center;
+        }
+
+        .about-content h2 {
+            font-size: 35px;
+            margin: 10px 0 18px;
+            color: #14203a;
+        }
+
+        .about-content p {
+            color: #64748b;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .about-box {
+            background: #eff6ff;
+            border: 1px solid #dbeafe;
+            border-radius: 18px;
+            padding: 35px;
+        }
+
+        .about-box h3 {
+            margin-bottom: 18px;
+        }
+
+        .about-box ul {
+            list-style: none;
+            display: grid;
+            gap: 14px;
+        }
+
+        .about-box li {
+            color: #53627a;
+            font-size: 14px;
+        }
+
+        .about-box li span {
+            color: #2563eb;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+
+        /* CONTACT */
+
+        .contact {
+            padding: 75px 7%;
+            background: #eef4ff;
+        }
+
+        .contact-container {
+            max-width: 1000px;
+            margin: auto;
+            text-align: center;
+        }
+
+        .contact-container h2 {
+            font-size: 34px;
+            margin: 10px 0 15px;
+        }
+
+        .contact-container p {
+            color: #64748b;
+            line-height: 1.7;
+        }
+
+        .contact-cards {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 35px;
+            flex-wrap: wrap;
+        }
+
+        .contact-card {
+            background: white;
+            border-radius: 14px;
+            padding: 22px 35px;
+            min-width: 220px;
+            border: 1px solid #e1e8f5;
+        }
+
+        .contact-card strong {
+            display: block;
+            margin-bottom: 7px;
+        }
+
+        .contact-card span {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+
+        /* ADMIN */
+
+        .admin-area {
+            text-align: center;
+            padding: 30px 20px;
+            background: white;
+        }
+
+        .admin-area p {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .admin-area a {
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .admin-area a:hover {
+            color: #2563eb;
+        }
+
+
+        /* FOOTER */
+
+        footer {
+            background: #0f172a;
+            color: white;
+            padding: 35px 7%;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .footer-logo {
+            color: #60a5fa;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .footer-text {
+            color: #94a3b8;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .copyright {
+            color: #64748b;
+            font-size: 12px;
+            text-align: right;
+        }
+
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+
+            .nav-center {
+                margin-left: 0;
+                gap: 18px;
+            }
+
+            .service-container {
+                grid-template-columns: 1fr;
+            }
+
+            .about-container {
+                grid-template-columns: 1fr;
+                gap: 35px;
+            }
+
+            .hero h1 {
+                font-size: 45px;
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            .navbar {
+                height: auto;
+                padding: 18px 5%;
+                flex-wrap: wrap;
+                gap: 18px;
+            }
+
+            .nav-center {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .nav-right {
+                margin-left: auto;
+            }
+
+            .hero {
+                padding: 65px 6%;
+            }
+
+            .hero h1 {
+                font-size: 38px;
+            }
+
+            .hero p {
+                font-size: 15px;
+            }
+
+            .hero-info {
+                gap: 15px;
+            }
+
+            .services,
+            .about {
+                padding: 65px 6%;
+            }
+
+            .section-header h2 {
+                font-size: 30px;
+            }
+
+            .footer-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .copyright {
+                text-align: center;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+    <a href="{{ url_for('home') }}" class="logo">
+        HostelCare
+    </a>
+
+    <nav class="nav-center">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="#services">Services</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="nav-right">
+
+        <a href="{{ url_for('student_login') }}"
+           class="nav-btn student-btn">
+            Student Login
+        </a>
+
+        <a href="{{ url_for('admin_login') }}"
+           class="nav-btn admin-btn">
+            Admin Login
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="hero-tag">
+            SMART HOSTEL MANAGEMENT
+        </div>
+
+        <h1>
+            Your Hostel.<br>
+            <span>Our Responsibility.</span>
+        </h1>
+
+        <p>
+            HostelCare is a smart complaint management platform
+            that helps students report hostel problems, track
+            complaint progress and receive faster resolutions.
+        </p>
+
+        <div class="hero-info">
+
+            <div class="hero-stat">
+
+                <div class="stat-icon">
+                    📝
+                </div>
+
+                <div>
+                    <strong>Easy Complaints</strong>
+                    <small>Report problems quickly</small>
+                </div>
+
+            </div>
+
+
+            <div class="hero-stat">
+
+                <div class="stat-icon">
+                    📊
+                </div>
+
+                <div>
+                    <strong>Live Tracking</strong>
+                    <small>Monitor complaint status</small>
+                </div>
+
+            </div>
+
+
+            <div class="hero-stat">
+
+                <div class="stat-icon">
+                    ⚡
+                </div>
+
+                <div>
+                    <strong>Faster Resolution</strong>
+                    <small>Better hostel management</small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- SERVICES -->
+
+<section class="services" id="services">
+
+    <div class="section-header">
+
+        <div class="section-label">
+            WHAT WE OFFER
+        </div>
+
+        <h2>
+            Everything You Need
+        </h2>
+
+        <p>
+            Simple tools for students and hostel administration
+            to manage complaints efficiently.
+        </p>
+
+    </div>
+
+
+    <div class="service-container">
+
+
+        <!-- SUBMIT COMPLAINT -->
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                📝
+            </div>
+
+            <h3>
+                Submit Complaint
+            </h3>
+
+            <p>
+                Report issues related to water, electricity,
+                Wi-Fi, room maintenance and other hostel problems.
+            </p>
+
+            <div class="service-actions">
+
+                <a href="{{ url_for('complaint') }}"
+                   class="service-btn">
+                    Submit Complaint →
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- TRACK COMPLAINT -->
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                📊
+            </div>
+
+            <h3>
+                Track Complaints
+            </h3>
+
+            <p>
+                View your submitted complaints and check their
+                current status and progress.
+            </p>
+
+            <div class="service-actions">
+
+                <a href="{{ url_for('student_login') }}"
+                   class="service-btn">
+                    Track Now →
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- HOSTEL SUPPORT -->
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                🛠️
+            </div>
+
+            <h3>
+                Hostel Support
+            </h3>
+
+            <p>
+                Manage common hostel-related problems through
+                a simple and organized complaint system.
+            </p>
+
+            <div class="support-list">
+
+                <span>✓ Water & Electricity</span>
+                <span>✓ Wi-Fi & Internet</span>
+                <span>✓ Room Maintenance</span>
+                <span>✓ General Hostel Issues</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ABOUT -->
+
+<section class="about" id="about">
+
+    <div class="about-container">
+
+        <div class="about-content">
+
+            <div class="section-label">
+                ABOUT HOSTELCARE
+            </div>
+
+            <h2>
+                Making Hostel Management Smarter
+            </h2>
+
+            <p>
+                HostelCare provides a centralized platform where
+                students can report problems and hostel administration
+                can manage complaints efficiently.
+            </p>
+
+            <p>
+                Instead of depending on verbal complaints or
+                scattered messages, every complaint can be recorded,
+                tracked and resolved through one system.
+            </p>
+
+        </div>
+
+
+        <div class="about-box">
+
+            <h3>
+                Why HostelCare?
+            </h3>
+
+            <ul>
+
+                <li>
+                    <span>✓</span>
+                    Centralized complaint management
+                </li>
+
+                <li>
+                    <span>✓</span>
+                    Easy complaint tracking
+                </li>
+
+                <li>
+                    <span>✓</span>
+                    Status updates for students
+                </li>
+
+                <li>
+                    <span>✓</span>
+                    Feedback after resolution
+                </li>
+
+                <li>
+                    <span>✓</span>
+                    Better hostel administration
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- CONTACT -->
+
+<section class="contact" id="contact">
+
+    <div class="contact-container">
+
+        <div class="section-label">
+            NEED HELP?
+        </div>
+
+        <h2>
+            Contact Hostel Administration
+        </h2>
+
+        <p>
+            For hostel-related problems, submit a complaint through
+            HostelCare and track its progress from your dashboard.
+        </p>
+
+        <div class="contact-cards">
+
+            <div class="contact-card">
+
+                <strong>
+                    Complaint Support
+                </strong>
+
+                <span>
+                    Submit and track hostel issues
+                </span>
+
+            </div>
+
+
+            <div class="contact-card">
+
+                <strong>
+                    Maintenance
+                </strong>
+
+                <span>
+                    Water, electricity, Wi-Fi & rooms
+                </span>
+
+            </div>
+
+
+            <div class="contact-card">
+
+                <strong>
+                    Administration
+                </strong>
+
+                <span>
+                    Manage and resolve complaints
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ADMIN LINK -->
+
+<div class="admin-area">
+
+    <p>
+        Hostel administration access
+    </p>
+
+    <a href="{{ url_for('admin_login') }}">
+        Admin Login
+    </a>
+
+</div>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <div class="footer-container">
+
+        <div>
+
+            <div class="footer-logo">
+                HostelCare
+            </div>
+
+            <div class="footer-text">
+                Making hostel life better through smart complaint management.
+            </div>
+
+        </div>
+
+        <div class="copyright">
+            © 2026 HostelCare. All Rights Reserved.
+        </div>
+
+    </div>
+
+</footer>
+
+
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint Details | HostelCare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .details-container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .details-container h1 {
+            margin-bottom: 25px;
+        }
+        
+        .details-item {
+            padding: 14px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .details-item strong {
+            display: inline-block;
+            width: 160px;
+        }
+        
+        .complaint-image {
+            display: block;
+            max-width: 100%;
+            max-height: 400px;
+            margin-top: 15px;
+            border-radius: 10px;
+            object-fit: contain;
+        }
+        
+        .back-button {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 10px 20px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+        
+        .back-button:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="details-container">
+    <h1>Complaint Details</h1>
+    
+    <div class="details-item">
+        <strong>Complaint ID:</strong> {{ complaint[0] }}
+    </div>
+    
+    <div class="details-item">
+        <strong>Student Name:</strong> {{ complaint[1] }}
+    </div>
+    
+    <div class="details-item">
+        <strong>Email:</strong> {{ complaint[2] }}
+    </div>
+    
+    <div class="details-item">
+        <strong>Room Number:</strong> {{ complaint[3] }}
+    </div>
+    
+    <div class="details-item">
+        <strong>Category:</strong> {{ complaint[4] }}
+    </div>
+    
+    <div class="details-item">
+        <strong>Subject:</strong> {{ complaint[5] }}
+    </div>
+    
+    <div class="details-item">
+        <strong>Description:</strong> {{ complaint[6] }}
+    </div>
+    
+    <div class="details-item">
+        <strong>Status:</strong> {{ complaint[7] }}
+    </div>
+    
+    <div class="details-item">
+        <strong>Priority:</strong> {{ complaint[8] }}
+    </div>
+    
+    <div class="details-item">
+        <strong>Submitted On:</strong> {{ complaint[10] or 'Not available' }}
+    </div>
+    
+    <div class="details-item">
+        <strong>Complaint ID:</strong>
+        
+        {% if complaint[9] %}
+            <a href="{{ url_for('static', filename='uploads/' + complaint[9]) }}" target="_blank">
+                <img src="{{ url_for('static', filename='uploads/' + complaint[9]) }}"
+                alt="Complaint Image"
+                class="complaint-image"
+                >
+            </a>
+        {% else %}
+            <p>No image uploaded.</p>
+        {% endif %}
+    </div>
+
+    <a href="{{ url_for('admin') }}" class="back-button">Back to Dashboard</a>
+</div>
+
+</body>
+</html>

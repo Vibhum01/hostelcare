@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Login | HostelCare</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                linear-gradient(135deg, #eef5ff 0%, #f8fbff 50%, #e8f0ff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            width: 450px;
+            height: 450px;
+            border-radius: 50%;
+            background: #dbeafe;
+            top: -180px;
+            left: -150px;
+            opacity: 0.65;
+        }
+
+        body::after {
+            content: "";
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            background: #e0e7ff;
+            bottom: -150px;
+            right: -100px;
+            opacity: 0.6;
+        }
+
+
+        /* MAIN */
+
+        .page-container {
+            width: 100%;
+            max-width: 1050px;
+            min-height: 650px;
+            margin: 30px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 25px 70px rgba(30, 64, 175, 0.12);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+        }
+
+
+        /* LEFT */
+
+        .welcome-section {
+            background:
+                linear-gradient(145deg, #2563eb 0%, #1d4ed8 55%, #173ea5 100%);
+            color: white;
+            padding: 65px 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-section::before {
+            content: "";
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 50%;
+            right: -150px;
+            top: -80px;
+        }
+
+        .welcome-section::after {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            left: -100px;
+            bottom: -100px;
+        }
+
+        .brand {
+            font-size: 25px;
+            font-weight: 800;
+            margin-bottom: 70px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .brand span {
+            color: #bfdbfe;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .welcome-content .tag {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #bfdbfe;
+            margin-bottom: 18px;
+        }
+
+        .welcome-content h1 {
+            font-size: 42px;
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+
+        .welcome-content p {
+            color: #dbeafe;
+            line-height: 1.8;
+            font-size: 15px;
+            max-width: 390px;
+        }
+
+        .features {
+            margin-top: 35px;
+            display: grid;
+            gap: 16px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #e0ecff;
+            font-size: 14px;
+        }
+
+        .feature-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            background: rgba(255,255,255,0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        /* LOGIN */
+
+        .login-section {
+            padding: 60px 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-header {
+            margin-bottom: 32px;
+        }
+
+        .login-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: #eff6ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 18px;
+        }
+
+        .login-header h2 {
+            font-size: 30px;
+            color: #172033;
+            margin-bottom: 8px;
+        }
+
+        .login-header p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+
+        /* FLASH */
+
+        .message {
+            padding: 12px 14px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .success {
+            background: #ecfdf5;
+            color: #047857;
+            border: 1px solid #a7f3d0;
+        }
+
+        .error {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+
+        /* FORM */
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #334155;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            height: 50px;
+            padding: 0 45px 0 15px;
+            border: 1px solid #dbe2ec;
+            border-radius: 9px;
+            outline: none;
+            font-size: 14px;
+            color: #172033;
+            transition: 0.2s;
+        }
+
+        .input-wrapper input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 17px;
+        }
+
+
+        /* PASSWORD */
+
+        .show-password {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+
+        /* BUTTON */
+
+        .login-btn {
+            width: 100%;
+            height: 50px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 9px;
+            background: #2563eb;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .login-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+        }
+
+
+        /* REGISTER */
+
+        .register {
+            text-align: center;
+            margin-top: 25px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .register a {
+            color: #2563eb;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .register a:hover {
+            text-decoration: underline;
+        }
+
+
+        /* HOME */
+
+        .home-link {
+            text-align: center;
+            margin-top: 18px;
+        }
+
+        .home-link a {
+            color: #94a3b8;
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+        .home-link a:hover {
+            color: #2563eb;
+        }
+
+
+        /* RESPONSIVE */
+
+        @media (max-width: 800px) {
+
+            .page-container {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+                min-height: auto;
+            }
+
+            .welcome-section {
+                padding: 40px;
+            }
+
+            .brand {
+                margin-bottom: 35px;
+            }
+
+            .welcome-content h1 {
+                font-size: 32px;
+            }
+
+            .features {
+                margin-top: 25px;
+            }
+
+            .login-section {
+                padding: 45px 40px;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            body {
+                align-items: flex-start;
+            }
+
+            .page-container {
+                margin: 15px;
+                border-radius: 18px;
+            }
+
+            .welcome-section {
+                padding: 35px 28px;
+            }
+
+            .login-section {
+                padding: 35px 28px;
+            }
+
+            .welcome-content h1 {
+                font-size: 28px;
+            }
+
+            .login-header h2 {
+                font-size: 26px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="page-container">
+
+
+    <!-- LEFT SIDE -->
+
+    <section class="welcome-section">
+
+        <div class="brand">
+            Hostel<span>Care</span>
+        </div>
+
+
+        <div class="welcome-content">
+
+            <div class="tag">
+                STUDENT PORTAL
+            </div>
+
+            <h1>
+                Welcome Back.
+            </h1>
+
+            <p>
+                Login to manage your hostel complaints,
+                track their progress and stay updated
+                on every resolution.
+            </p>
+
+
+            <div class="features">
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        📝
+                    </div>
+
+                    <span>
+                        Submit hostel complaints easily
+                    </span>
+
+                </div>
+
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        📊
+                    </div>
+
+                    <span>
+                        Track complaint status
+                    </span>
+
+                </div>
+
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        ⭐
+                    </div>
+
+                    <span>
+                        Give feedback after resolution
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- RIGHT SIDE -->
+
+    <section class="login-section">
+
+
+        <div class="login-header">
+
+            <div class="login-icon">
+                🎓
+            </div>
+
+            <h2>
+                Student Login
+            </h2>
+
+            <p>
+                Enter your registered details to continue.
+            </p>
+
+        </div>
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div class="message {{ category }}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <form method="POST">
+
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email Address
+                </label>
+
+                <div class="input-wrapper">
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        required
+                        autocomplete="email"
+                    >
+
+                    <span class="input-icon">
+                        ✉
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <div class="input-wrapper">
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        required
+                        autocomplete="current-password"
+                    >
+
+                    <button
+                        type="button"
+                        class="show-password"
+                        onclick="togglePassword()">
+                        Show
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <button type="submit" class="login-btn">
+                Login to HostelCare →
+            </button>
+
+        </form>
+
+
+        <div class="register">
+            Don't have an account?
+            <a href="{{ url_for('student_register') }}">
+                Create Account
+            </a>
+        </div>
+
+
+        <div class="home-link">
+
+            <a href="{{ url_for('home') }}">
+                ← Back to Home
+            </a>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+
+function togglePassword() {
+
+    const password = document.getElementById("password");
+    const button = document.querySelector(".show-password");
+
+    if (password.type === "password") {
+        password.type = "text";
+        button.textContent = "Hide";
+    } else {
+        password.type = "password";
+        button.textContent = "Show";
+    }
+
+}
+
+</script>
+
+
+</body>
+</html>
