@@ -91,6 +91,17 @@
             color: white;
         }
 
+        .member-btn {
+            background: #eef4ff;
+            color: #2563eb;
+            border: 1px solid #2563eb;
+        }
+
+        .member-btn:hover {
+            background: #2563eb;
+            color: white;
+        }
+
         .admin-btn {
             background: white;
             color: #2563eb;
@@ -610,6 +621,11 @@
         <a href="{{ url_for('student_login') }}"
            class="nav-btn student-btn">
             Student Login
+        </a>
+
+        <a href="{{ url_for('member_login') }}"
+           class="nav-btn member-btn">
+            Member Login
         </a>
 
         <a href="{{ url_for('admin_login') }}"
